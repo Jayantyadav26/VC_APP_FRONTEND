@@ -55,7 +55,7 @@ function RoomAccess() {
         }
 
         if (roomOperation === "joinRoom") {
-            ws.joinRoom(roomName, userId);
+           await ws.joinRoom(roomName, userId);
         }
     };
 

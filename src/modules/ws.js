@@ -27,7 +27,7 @@ const handleError = (errorEventObject) =>{
 }
 
 //Outgoing message to the server.
-export function joinRoom(roomName, userId){
+export async  function joinRoom(roomName, userId){
     const message = {
         label : constants.label.NORMAL_SERVER_PROCESS,
         data:{
@@ -37,6 +37,7 @@ export function joinRoom(roomName, userId){
         }
     };
     state.getState().userWebSocketConnection.send(JSON.stringify(message));
+    return;
 }
 
 export async function exitRoom(roomName, userId){
@@ -143,7 +144,7 @@ function joinSuccessHandler(data){
     const roomName = data.roomName;
     state.setOtherUserId(otherUserId);
     state.setRoomName(roomName);
-    alert("succesfully joined room ");
+    // alert("succesfully joined room ");
     state.setJoineeStatus(true);
 }
 
@@ -151,7 +152,7 @@ function joinNotifyHandler(data){
     //setting state of other user.
     let otherUserId = data.joineeId;
     state.setOtherUserId(otherUserId);
-    alert(data.message);
+    // alert(data.message);
     webRTCHandler.startWebRTCProcess();
 }
 

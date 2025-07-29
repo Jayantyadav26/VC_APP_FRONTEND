@@ -57,7 +57,7 @@ function Lobby() {
             state.setJoineeStatus(false);
             state.setUserId(null);
             await ws.exitRoom(roomName, userId);
-            console.log("exit function haggiiiiiiiiiiiiii");
+            // console.log("exit function haggiiiiiiiiiiiiii");
             await webRTCHandler.closePeerConnection();
         }
 
