@@ -1,16 +1,16 @@
-//import modules
+// import modules
 import * as state from "./state";
 import * as ws from "./ws";
 
-//set up global variables.
+// set up global variables
 export let pc;
 let dataChannel;
 const icecandidatesGenerated = [];
 const icecandidatesReceivedBuffer = [];
 
-// step 1
-const webRTCConfigurations ={
-    iceServers:[
+// Step 1: ICE server config
+const webRTCConfigurations = {
+    iceServers: [
         {
             urls: [
                 "stun:stun.l.google.com:19302",
@@ -18,166 +18,165 @@ const webRTCConfigurations ={
                 "stun:stun3.l.google.com:19302",
                 "stun:stun4.l.google.com:19302"
             ]
-        }
+        },
+        // OPTIONAL: TURN server for production
+        // {
+        //     urls: "turn:your.turn.server:3478",
+        //     username: "user",
+        //     credential: "pass"
+        // }
     ]
-}
+};
 
-//function will be called in creators side.
-export async function startWebRTCProcess(){
-    let offer;
+// Start WebRTC on offerer side
+export async function startWebRTCProcess() {
+    if (!state.getState().localStream) {
+        const stream = await navigator.mediaDevices.getUserMedia({ video: true, audio: true });
+        state.setLocalStream(stream);
+    }
+
     await createPeerConnectionObject();
-    //adding local stream to peer connection.
     addStreams();
     createDataChannel(true);
-    offer = await pc.createOffer();
+
+    const offer = await pc.createOffer();
     await pc.setLocalDescription(offer);
     ws.sendOffer(offer);
-}//end of startWebRTCProcess function.
-
-//function to create peer connection object.
-async function createPeerConnectionObject(){
-    pc = new RTCPeerConnection(webRTCConfigurations); //passing the iceServers.
-    
-    pc.addEventListener("connectionstatechange", (e)=>{
-        console.log("Connection state changed to:",pc.connectionState);
-        if(pc.connectionState === "connected"){
-            alert("Connected to peer.");
-        }
-    })
-
-    pc.addEventListener("signalingstatechange", (e)=>{
-        console.log("Signaling state changed to: ", pc.signalingState);
-    })
-
-    pc.addEventListener("icecandidate", (e)=>{
-        if(e.candidate){
-            console.log("ICE: ",e.candidate);
-            icecandidatesGenerated.push(e.candidate);
-        }
-    })
-
-    pc.addEventListener("track", (e)=>{
-        console.log("Got a Track fom peer: ",e);
-        e.streams[0].getTracks().forEach(track=>{
-            state.getState().remoteStream.addTrack(track,state.getState().remoteStream);
-        })
-        console.log("yoyoyoyoyoyo");
-        document.dispatchEvent(new Event("remote-stream-updated"));
-    })
-    
 }
 
+// Create RTCPeerConnection
+async function createPeerConnectionObject() {
+    pc = new RTCPeerConnection(webRTCConfigurations);
 
-//function to create a data channel.
-function createDataChannel(isOffer){
-    if(isOffer){
+    pc.addEventListener("connectionstatechange", () => {
+        console.log("Connection state changed to:", pc.connectionState);
+        if (pc.connectionState === "connected") {
+            alert("Connected to peer.");
+        }
+    });
+
+    pc.addEventListener("signalingstatechange", () => {
+        console.log("Signaling state changed to:", pc.signalingState);
+    });
+
+    pc.addEventListener("iceconnectionstatechange", () => {
+        console.log("ICE Connection State:", pc.iceConnectionState);
+    });
+
+    pc.addEventListener("icegatheringstatechange", () => {
+        console.log("ICE Gathering State:", pc.iceGatheringState);
+    });
+
+    pc.addEventListener("icecandidate", (e) => {
+        if (e.candidate) {
+            console.log("ICE:", e.candidate);
+            icecandidatesGenerated.push(e.candidate);
+            // Send immediately
+            ws.sendIceCandidates([e.candidate]);
+        }
+    });
+
+    pc.addEventListener("track", (e) => {
+        console.log("Got a Track from peer:", e);
+        e.streams[0].getTracks().forEach(track => {
+            state.getState().remoteStream.addTrack(track, state.getState().remoteStream);
+        });
+        document.dispatchEvent(new Event("remote-stream-updated"));
+    });
+}
+
+// Create or receive data channel
+function createDataChannel(isOffer) {
+    if (isOffer) {
         const dataChannelOptions = {
             ordered: false,
             maxRetransmits: 0,
-        }
+        };
         dataChannel = pc.createDataChannel("top-secret-channel", dataChannelOptions);
         registerDataChannelEventListeners();
-    }else{
-        pc.ondatachannel = (e)=>{
-            dataChannel = e.channel
+    } else {
+        pc.ondatachannel = (e) => {
+            dataChannel = e.channel;
             registerDataChannelEventListeners();
-        }
+        };
     }
-}//end of createDataChannel function.
+}
 
-// handleAnswer function.
-export async function handleAnswer(data){
-    ws.sendIceCandidates(icecandidatesGenerated);
+// Handle answer (receiver -> sender)
+export async function handleAnswer(data) {
     await pc.setRemoteDescription(data.answer);
-    //adding ice candidates from buffer.
-    for(const candidate of icecandidatesReceivedBuffer){
+    for (const candidate of icecandidatesReceivedBuffer) {
         await pc.addIceCandidate(candidate);
     }
-    icecandidatesReceivedBuffer.splice(0,icecandidatesReceivedBuffer.length); //reset buffer.
+    icecandidatesReceivedBuffer.length = 0;
 }
-//handle ice candidates received function.
-export function iceCandidatesReceived(data){
-    if(pc.remoteDescription){
-        try{
-            data.candidate.forEach(can =>{
+
+// ICE candidates received from peer
+export function iceCandidatesReceived(data) {
+    if (pc.remoteDescription) {
+        try {
+            data.candidate.forEach(can => {
                 pc.addIceCandidate(can);
-            })
-        }catch(e){
-            console.log("Error adding ice candidate: ",e);
+            });
+        } catch (e) {
+            console.error("Error adding ice candidate:", e);
         }
-    }else{
-        data.candidate.forEach(can=>{
+    } else {
+        data.candidate.forEach(can => {
             icecandidatesReceivedBuffer.push(can);
-        })
+        });
     }
-}//end of iceCandidatesReceived function.
+}
 
-
-//register event listeners for data channel.
-function registerDataChannelEventListeners(){
-    dataChannel.addEventListener("message", (e)=>{
-
-    })
-    dataChannel.addEventListener("close", (e)=>{
-        //will fire for all users that are listening to this data channel.
-        console.log("the close event was fired on your data channel");
+// Data channel events
+function registerDataChannelEventListeners() {
+    dataChannel.addEventListener("message", (e) => {
+        console.log("Received data:", e.data);
     });
-    dataChannel.addEventListener("open", (e)=>{
-        //this will  fire when webRTC connection is established.
-        console.log("data channel has been opened. you are now ready to send and receive messages over your data channel..");
+    dataChannel.addEventListener("close", () => {
+        console.log("Data channel closed.");
     });
-}//end of registerDataChannelEventListeners function.
+    dataChannel.addEventListener("open", () => {
+        console.log("Data channel opened. Ready to send messages.");
+    });
+}
 
-
-
-
-//reciever side.
-export async function handleOffer(data){
-    let answer;
+// Handle offer (sender -> receiver)
+export async function handleOffer(data) {
     await createPeerConnectionObject();
-    //adding local stream to peer connection.
-    if(!state.getState().localStream){
-        state.setLocalStream(await navigator.mediaDevices.getUserMedia({
-            video: true,
-            audio: true,
-        }));
-        addStreams();
-    }else{
-        addStreams();
+
+    if (!state.getState().localStream) {
+        const stream = await navigator.mediaDevices.getUserMedia({ video: true, audio: true });
+        state.setLocalStream(stream);
     }
-    // addStreams();
+
+    addStreams();
     createDataChannel(false);
+
     await pc.setRemoteDescription(data.offer);
-    answer = await pc.createAnswer();
+    const answer = await pc.createAnswer();
     await pc.setLocalDescription(answer);
+
     ws.sendAnswer(answer);
-    ws.sendIceCandidates(icecandidatesGenerated);
 }
 
-
-
-//function to add local stream to peer connection.
-function addStreams(){
-    if(pc){
-        // console.log("created a pc", localStream)
-        state.getState().localStream.getTracks().forEach((track)=>{
-            console.log("Adding track:  ",pc)
-            pc.addTrack(track,state.getState().localStream);
-        })
-    }else{
-        console.log("pc is null");
+// Add local stream to peer connection
+function addStreams() {
+    if (pc) {
+        state.getState().localStream.getTracks().forEach(track => {
+            pc.addTrack(track, state.getState().localStream);
+        });
+    } else {
+        console.warn("Peer connection not initialized when calling addStreams");
     }
-       
 }
 
-
-export async function closePeerConnection(){
-    if(pc){
+// Close connection
+export async function closePeerConnection() {
+    if (pc) {
         pc.close();
-         console.log("You have closed your peer connection by calling the close() method.");
         pc = null;
-        // state.setLocalStream(null);
         state.setRemoteStream(new MediaStream());
-    }  
-    console.log("Your pc object after exiting the room is now: ",pc);
+        console.log("Peer connection closed.");
+    }
 }
