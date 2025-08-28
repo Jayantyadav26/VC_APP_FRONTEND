@@ -1,6 +1,6 @@
 import React, { useRef, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import "../../public/styles/lobby.css"
+import "../lobby.css"
 import * as state from "../modules/state";
 import * as ajax from "../modules/ajax";
 import * as ws from "../modules/ws";

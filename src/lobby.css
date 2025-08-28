@@ -6,14 +6,9 @@ body, html {
   padding: 0;
   font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
   background-color: #f4f4f4;
-  color: #333;
+  color: #535353;
 }
 
-p {
-  text-align: center;
-  font-size: 1.5rem;
-  margin-top: 20px;
-}
 
 /* Container for both videos */
 .video-container {

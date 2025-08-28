@@ -32,7 +32,7 @@ export function setRemoteStream(remoteStream){
 
 //Setter functions
 // setUserId function
-export const setUserId = (userId) =>{
+export const setUserId = async (userId) =>{
     setState({userId});
 }
 
@@ -42,7 +42,7 @@ export const setUserName = (userName) =>{
 }
 
 //setRoomName function
-export const setRoomName = (roomName) =>{
+export const setRoomName = async (roomName) =>{
     setState({roomName});
 }
 
@@ -56,7 +56,7 @@ export const setUserWebSocketConnection = (userWebSocketConnection) =>{
     setState({userWebSocketConnection});
 }
 
-export const setJoineeStatus = (joineeStatus) =>{
+export const setJoineeStatus = async (joineeStatus) =>{
     setState({joineeStatus});
 }
 

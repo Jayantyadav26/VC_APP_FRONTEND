@@ -50,9 +50,9 @@ async function createPeerConnectionObject() {
 
     pc.addEventListener("connectionstatechange", () => {
         console.log("Connection state changed to:", pc.connectionState);
-        if (pc.connectionState === "connected") {
-            alert("Connected to peer.");
-        }
+        // if (pc.connectionState === "connected") {
+        //     alert("Connected to peer.");
+        // }
     });
 
     pc.addEventListener("signalingstatechange", () => {

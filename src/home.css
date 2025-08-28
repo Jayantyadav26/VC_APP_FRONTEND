@@ -1,0 +1,145 @@
+*{
+  margin: 0;
+  padding: 0;
+}
+
+.home-container {
+  /* background-color: aqua; */
+  color: rgb(49, 49, 49);
+  height: 90vh;
+  width: 100vw;
+  margin-top: 2vh;
+}
+
+.home-nav{
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-evenly;
+  align-items: flex-end;
+  /* border: 2px solid black; */
+}
+
+.home-nav h2{
+  font-size: 1.5rem;
+  /* border: 2px solid black; */
+  flex-grow: 2.5;
+  padding-left: 10% ;
+}
+
+.home-nav p{
+  font-size: 1.5rem;
+  /* border: 2px solid black; */
+  flex-grow: 1.5;
+  text-align: center;
+}
+
+.home-body{
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  justify-content: space-evenly;
+  /* border: 2px solid black; */
+  align-items: flex-start;
+  gap: 2rem;
+  padding:5rem 2.5rem;
+}
+
+/* description and it childs */
+.description{
+  /* border: 2px solid black; */
+  flex: 1 1 45%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: left;
+  gap: 1.5rem;
+  /* padding: 5rem; */
+  margin-top: 3rem;
+}
+
+.description p{
+  font-size: 1.2rem;
+  padding: 0.5rem;
+  text-align: left;
+  /* border: 2px solid black; */
+}
+.description h2{
+  /* border: 2px solid black; */
+  padding: 0.5rem;
+  /* font-size: 1.2rem; */
+}
+
+
+.operations{
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: flex-start;
+  align-items: center;
+  gap: 1rem;
+  /* border: 2px solid black; */
+}
+
+.operations button{
+  border: 2px solid black;
+  border-radius: 50px;
+  height: 2.5rem;
+  width: 8rem;
+}
+
+.operations input{
+  border-radius: 10px;
+  font-size: smaller;
+}
+
+
+/* image crousel and its childs */
+.section-2{
+  /* border: 2px solid black; */
+  flex:1 1 45%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 2rem;
+  min-height: 22rem; /* set a min height */
+}
+.image-carousel{
+  flex:1 1 45%;
+  height: 20rem;
+  /* border: 2px solid black; */
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+  gap: 0rem;
+}
+.image-carousel img{
+  height: 14rem;
+  width: 14rem;
+  /* border: 1px solid black; */
+  border-radius: 14rem;
+}
+.image-carousel button{
+  border: none;
+  height: 2rem;
+  width: 2rem;
+  border-radius: 2rem;
+  font-size: large;
+}
+
+.image-text{
+  flex: 1 1 45%;
+  font-size: small;
+  /* border: 1px solid black; */
+  padding: 0.5rem;
+  text-align: left;
+}
+
+
+/* media queries */
+@media (max-width: 768px) {
+  .description, .image-crousel {
+    flex: 1 1 100%;       /* take full width */
+  }
+}
+

@@ -3,7 +3,7 @@ import { useNavigate } from "react-router-dom";
 import * as state from "../modules/state";
 import * as ws from "../modules/ws";
 import * as ajax from "../modules/ajax";
-import "../../public/styles/roomAccess.css";
+import "../roomAccess.css";
 function RoomAccess() {
     const [userId, setUserId] = useState("");
     const [userName, setUserName] = useState("");
