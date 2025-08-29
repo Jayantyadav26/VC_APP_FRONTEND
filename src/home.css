@@ -1,145 +1,177 @@
-*{
+* {
   margin: 0;
   padding: 0;
+  box-sizing: border-box;
 }
 
 .home-container {
-  /* background-color: aqua; */
   color: rgb(49, 49, 49);
-  height: 90vh;
-  width: 100vw;
+  min-height: 90vh;
+  width: 100%;
   margin-top: 2vh;
+  padding: 0 1rem;
 }
 
-.home-nav{
+/* NAVIGATION */
+.home-nav {
   display: flex;
   flex-wrap: wrap;
-  justify-content: space-evenly;
-  align-items: flex-end;
-  /* border: 2px solid black; */
+  justify-content: space-between;
+  align-items: center;
+  padding: 1rem 0;
 }
 
-.home-nav h2{
-  font-size: 1.5rem;
-  /* border: 2px solid black; */
-  flex-grow: 2.5;
-  padding-left: 10% ;
+.home-nav h2 {
+  font-size: clamp(1.2rem, 2vw, 1.5rem);
+  flex-grow: 2;
+  padding-left: 5%;
 }
 
-.home-nav p{
-  font-size: 1.5rem;
-  /* border: 2px solid black; */
-  flex-grow: 1.5;
+.home-nav p {
+  font-size: clamp(1rem, 2vw, 1.5rem);
+  flex-grow: 1;
   text-align: center;
 }
 
-.home-body{
+/* MAIN BODY */
+.home-body {
   display: flex;
-  flex-direction: row;
   flex-wrap: wrap;
   justify-content: space-evenly;
-  /* border: 2px solid black; */
-  align-items: flex-start;
   gap: 2rem;
-  padding:5rem 2.5rem;
+  padding: 3rem 1rem;
 }
 
-/* description and it childs */
-.description{
-  /* border: 2px solid black; */
+/* DESCRIPTION */
+.description {
   flex: 1 1 45%;
   display: flex;
   flex-direction: column;
-  justify-content: center;
-  align-items: left;
-  gap: 1.5rem;
-  /* padding: 5rem; */
-  margin-top: 3rem;
+  gap: 1rem;
+  margin-top: 1rem;
 }
 
-.description p{
-  font-size: 1.2rem;
-  padding: 0.5rem;
+.description p {
+  font-size: clamp(1rem, 1.5vw, 1.2rem);
+  padding: 0.5rem 0;
   text-align: left;
-  /* border: 2px solid black; */
-}
-.description h2{
-  /* border: 2px solid black; */
-  padding: 0.5rem;
-  /* font-size: 1.2rem; */
 }
 
+.description h2 {
+  padding: 0.5rem 0;
+  font-size: clamp(1.2rem, 2vw, 1.5rem);
+}
 
-.operations{
+/* OPERATIONS */
+.operations {
   display: flex;
   flex-wrap: wrap;
-  justify-content: flex-start;
-  align-items: center;
   gap: 1rem;
-  /* border: 2px solid black; */
 }
 
-.operations button{
+.operations button {
   border: 2px solid black;
   border-radius: 50px;
   height: 2.5rem;
-  width: 8rem;
+  min-width: 7rem;
+  padding: 0 1rem;
+  cursor: pointer;
+  font-size: 0.9rem;
 }
 
-.operations input{
+.operations input {
   border-radius: 10px;
-  font-size: smaller;
+  font-size: 0.9rem;
+  padding: 0.5rem;
+  width: 100%;
+  max-width: 15rem;
 }
 
-
-/* image crousel and its childs */
-.section-2{
-  /* border: 2px solid black; */
-  flex:1 1 45%;
+/* SECTION-2 / IMAGE CAROUSEL */
+.section-2 {
+  flex: 1 1 45%;
   display: flex;
   flex-direction: column;
-  justify-content: center;
   align-items: center;
-  gap: 2rem;
-  min-height: 22rem; /* set a min height */
+  gap: 1.5rem;
+  min-height: 22rem;
 }
-.image-carousel{
-  flex:1 1 45%;
-  height: 20rem;
-  /* border: 2px solid black; */
+
+.image-carousel {
+  height: auto;
   display: flex;
-  flex-direction: row;
   justify-content: center;
   align-items: center;
-  gap: 0rem;
+  gap: 1rem;
 }
-.image-carousel img{
-  height: 14rem;
-  width: 14rem;
-  /* border: 1px solid black; */
-  border-radius: 14rem;
+
+.image-carousel img {
+  height: 12rem;
+  width: 12rem;
+  border-radius: 50%;
+  object-fit: cover;
 }
-.image-carousel button{
+
+.image-carousel button {
   border: none;
   height: 2rem;
   width: 2rem;
-  border-radius: 2rem;
-  font-size: large;
+  border-radius: 50%;
+  font-size: 1.2rem;
+  cursor: pointer;
 }
 
-.image-text{
-  flex: 1 1 45%;
-  font-size: small;
-  /* border: 1px solid black; */
+.image-text {
+  font-size: 0.9rem;
   padding: 0.5rem;
-  text-align: left;
+  text-align: center;
+  max-width: 90%;
 }
 
-
-/* media queries */
-@media (max-width: 768px) {
-  .description, .image-crousel {
-    flex: 1 1 100%;       /* take full width */
+/* MEDIA QUERIES */
+@media (max-width: 1024px) {
+  .home-body {
+    padding: 2rem 1rem;
   }
 }
 
+@media (max-width: 768px) {
+  .description, .section-2 {
+    flex: 1 1 100%;
+    text-align: center;
+    align-items: center;
+  }
+
+  .description p, 
+  .description h2 {
+    text-align: center;
+  }
+
+  .image-carousel img {
+    height: 10rem;
+    width: 10rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .home-nav {
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+
+  .operations {
+    flex-direction: column;
+    width: 100%;
+    align-items: center;
+  }
+
+  .operations button {
+    width: 100%;
+    max-width: 12rem;
+  }
+
+  .image-carousel img {
+    height: 8rem;
+    width: 8rem;
+  }
+}

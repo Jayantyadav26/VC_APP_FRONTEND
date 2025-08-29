@@ -1,52 +1,131 @@
-.join-container{
-    height: 90vh;
-    width: 100vw;
-    display: flex;
-    flex-direction: column;
-    justify-content: flex-start;
-    align-items: center;
-}
- 
-.join-nav{
-    flex: 1;
-    width: 100%;
-    display: flex;
-    flex-direction: row;
-    justify-content: flex-start;
-    align-items: center;
-    padding: 0 2rem;
+.join-container {
+  min-height: 90vh;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: center;
 }
 
-.media-container{
-    /* border: 2px solid green; */
-    flex: 8;
-    display: flex;
-    justify-content: flex-start;
-    align-items: center;
-    width: 100vw;    
+/* NAVBAR */
+.join-nav {
+  flex: 1;
+  width: 100%;
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+  padding: 0 2rem;
 }
 
-.video-container{
-    /* border: 2px solid green; */
-    flex: 1;
-    height: 70%;
-    width: 100%;
+/* MEDIA AREA */
+.media-container {
+  flex: 8;
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+  width: 100%;
+  gap: 1rem;
 }
 
-.join-confirm{
-    /* border: 2px solid green; */
-    height: 90%;
-    flex: .75;
-    display: flex;
+/* VIDEO BOX */
+.video-container {
+  flex: 1;
+  height: 70%;
+  width: 100%;
+  background: #000; /* fallback for video */
+  border-radius: 10px;
+  overflow: hidden;
+}
+
+/* CONFIRMATION SECTION */
+.join-confirm {
+  flex: 0.75;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: flex-start;
+  gap: 1.5rem;
+  padding: 1rem 2rem;
+}
+
+/* BUTTON */
+.join-btn {
+  height: 2.5rem;
+  min-width: 8rem;
+  border-radius: 2rem;
+  font-size: 0.9rem;
+  cursor: pointer;
+  border: 1px solid #333;
+  background: #f5f5f5;
+  transition: all 0.2s ease;
+}
+
+.join-btn:hover {
+  background: #ddd;
+}
+
+/* =====================
+   RESPONSIVE BEHAVIOR
+   ===================== */
+
+/* Tablets */
+@media (max-width: 1024px) {
+  .media-container {
     flex-direction: column;
     justify-content: center;
-    align-items: flex-start;
-    gap: 2rem;
-    padding: 0 2rem;
-} 
+    align-items: center;
+  }
 
-.join-btn{
-    height: 2rem;
-    width: 8rem;
-    border-radius: 2rem;
-} 
+  .video-container {
+    height: auto;
+    max-height: 50vh;
+  }
+
+  .join-confirm {
+    align-items: center;
+    text-align: center;
+  }
+}
+
+/* Phones */
+@media (max-width: 768px) {
+  .join-nav {
+    padding: 0 1rem;
+    justify-content: center;
+  }
+
+  .media-container {
+    flex-direction: column;
+    gap: 1rem;
+  }
+
+  .video-container {
+    width: 90%;
+    height: auto;
+  }
+
+  .join-confirm {
+    padding: 1rem;
+    align-items: center;
+    text-align: center;
+    gap: 1rem;
+  }
+
+  .join-btn {
+    width: 100%;
+    max-width: 12rem;
+  }
+}
+
+/* Small Phones */
+@media (max-width: 480px) {
+  .video-container {
+    width: 100%;
+    border-radius: 0;
+  }
+
+  .join-confirm {
+    width: 100%;
+    padding: 0.5rem;
+  }
+}
