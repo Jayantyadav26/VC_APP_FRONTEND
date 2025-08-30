@@ -77,7 +77,7 @@ function Home() {
     return (
         <div className="home-container">
             <div className="home-nav">
-                <h2>Welcome to My app</h2>
+                <h2>TOVO - A one to one video conferencing app</h2>
                 <p>{date}</p>
             </div>
             <div className="home-body">

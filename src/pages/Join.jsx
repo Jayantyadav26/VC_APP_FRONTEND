@@ -32,7 +32,7 @@ function Join(){
     return(
         <div className = "join-container">
            <div className="join-nav">
-                    <h1>App Name</h1>
+                    <h1>TOVO</h1>
            </div>
            <div className="media-container">
                 <div className="video-container">
